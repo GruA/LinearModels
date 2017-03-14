@@ -1,0 +1,56 @@
+---
+title: "praca_domowa_2"
+author: Agata Gruszczy??ska
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Generowanie danych:
+```{r}
+generujdane<-function(a,b,c){
+  y1<-rnorm(a)
+  y2<-rnorm(b)
+  y3<-rnorm(c)
+  y<-c(y1,y2,y3)
+  
+  x1<-rep(1,a)
+  x2<-rep(2,b)
+  x3<-rep(3,c)
+  x<-c(x1,x2,x3)
+  
+  XY<-data.frame(y,x)
+  colnames(XY)<-c("Wartosci", "Grupa")
+  return(XY)
+}
+```
+
+Testy:
+```{r}
+library(agricolae)
+test1<-function(a){
+model<-aov(Wartosci~Grupa,data=generujdane(a,a,a))
+t<-HSD.test(model, "Grupa", console=TRUE)
+return(t)
+}
+test2<-function(a,b,c){
+  model<-aov(Wartosci~Grupa,data=generujdane(a,b,c))
+  t<-SNK.test(model, "Grupa", console=TRUE)
+  return(t)
+}
+```
+Graficzne przedstawienie:
+```{r}
+graf<-function(n,a,b,c){
+  h<-c(replicate(n,HSD.test(lm(Wartosci~Grupa,data=generujdane(a,b,c)),"Grupa")))
+  g<-hist(h)
+  return(g)
+}
+  
+```
+
+```{r}
+
+```
